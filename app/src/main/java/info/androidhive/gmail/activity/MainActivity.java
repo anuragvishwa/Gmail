@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<List<Message>> call = apiService.savePost();
+        Call<List<Post>> call = apiService.savePost("1","1","1","1");
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
