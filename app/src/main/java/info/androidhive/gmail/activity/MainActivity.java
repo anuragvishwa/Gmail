@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                 // TODO - avoid looping
                 // the loop was performed to add colors to each message
-                for (Message message : response.body()) {
+                for (Post message : response.body()) {
                     // generate a random color
                     message.setColor(getRandomMaterialColor("400"));
                     messages.add(message);
