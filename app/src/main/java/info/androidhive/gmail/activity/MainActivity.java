@@ -89,10 +89,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<List<Post>> call = apiService.savePost("1","1","1","1");
-        call.enqueue(new Callback<List<Post>>() {
+        Call<Post> call = apiService.savePost("1","1","1","1");
+        call.enqueue(new Callback<Post>() {
             @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+            public void onResponse(Call<Post> call, Response<Post> response) {
                 // clear the inbox
                 messages.clear();
 
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
 
             @Override
-            public void onFailure(Call<List<Message>> call, Throwable t) {
+            public void onFailure(Call<Post> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Unable to fetch json: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(false);
             }
