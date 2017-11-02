@@ -12,32 +12,59 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import info.androidhive.gmail.R;
 import info.androidhive.gmail.adapter.MessagesAdapter;
 import info.androidhive.gmail.helper.DividerItemDecoration;
 import info.androidhive.gmail.model.Message;
 import info.androidhive.gmail.model.Post;
+import info.androidhive.gmail.model.Student;
 import info.androidhive.gmail.network.ApiClient;
 import info.androidhive.gmail.network.ApiInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
+
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.Response;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
+
+
+
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, MessagesAdapter.MessageAdapterListener {
     private List<Message> messages = new ArrayList<>();
+
+    private List<Student> students = new ArrayList<>();
+
+    private List<Post> posts = new ArrayList<>();
     private RecyclerView recyclerView;
     private MessagesAdapter mAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
+    RequestQueue requestQueue;
+    String baseUrl = "http://52.220.92.154/Conductor/api/";
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +95,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         actionModeCallback = new ActionModeCallback();
 
+        requestQueue = Volley.newRequestQueue(this);
+
         // show loader and fetch messages
         swipeRefreshLayout.post(
                 new Runnable() {
                     @Override
                     public void run() {
-                        getInbox();
+                        //getInbox();
+                        getData();
                     }
                 }
         );
@@ -83,28 +113,85 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
      * Fetches mail messages by making HTTP request
      * url: http://api.androidhive.info/json/inbox.json
      */
-    private void getInbox() {
+
+
+   public void getData(){
+       final RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+       String url = "http://52.220.92.154/Conductor/api/getPassHistory";
+       // Request a string response from the provided URL.
+       StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+               new Response.Listener<String>() {
+                   @Override
+                   public void onResponse(String response) {
+                       // Display the response string.
+                       //_response.setText(response);
+                       Log.d("response",response);
+
+
+                   }
+               }, new Response.ErrorListener() {
+           @Override
+           public void onErrorResponse(VolleyError error) {
+               //_response.setText("That didn't work!");
+               Log.v("Error",error.toString());
+           }
+       }) {
+           //adding parameters to the request
+
+           @Override
+           public Map<String,String> getHeaders() throws AuthFailureError{
+               HashMap<String, String> headers = new HashMap<String, String>();
+              // headers.put("Content-Type", "application/json; charset=utf-8");
+               headers.put("appkey", "kjshjsdhsjhdsjdhsjhd");
+               return headers;
+           }
+           @Override
+           protected Map<String, String> getParams() throws AuthFailureError {
+               Map<String, String> params = new HashMap<>();
+               params.put("studentID", "31520");
+              // params.clear();
+               //requestQueue.getCache().invalidate("studentID", true);
+               return params;
+           }
+       };
+       // Add the request to the RequestQueue.
+       queue.add(stringRequest);
+   }
+
+
+
+
+
+
+
+
+
+    /*private void getInbox() {
         swipeRefreshLayout.setRefreshing(true);
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<Post> call = apiService.savePost("1","1","1","1");
-        call.enqueue(new Callback<Post>() {
+        Call<List<Student>> call = apiService.getPassHistory("31520");
+       // Call<List<Post>> call = apiService.savePost("1","1","1","1");
+        call.enqueue(new Callback<List<Student>>() {
             @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
+            public void onResponse(Call<List<Student>> call, Response<List<Student>> response) {
                 // clear the inbox
-                messages.clear();
+                students.clear();
 
                 // add all the messages
                 // messages.addAll(response.body());
 
                 // TODO - avoid looping
                 // the loop was performed to add colors to each message
-                for (Post message : response.body()) {
+                Log.v(response.body().toString(),call.toString());
+
+                for (Student student : response.body()) {
                     // generate a random color
-                    message.setColor(getRandomMaterialColor("400"));
-                    messages.add(message);
+                    student.setColor(getRandomMaterialColor("400"));
+                    students.add(student);
                 }
 
                 mAdapter.notifyDataSetChanged();
@@ -112,12 +199,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
 
             @Override
-            public void onFailure(Call<Post> call, Throwable t) {
+            public void onFailure(Call<List<Student>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Unable to fetch json: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-    }
+    }*/
 
     /**
      * chooses a random color from array.xml
@@ -134,6 +221,20 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
         return returnColor;
     }
+
+
+    /*private int getSID(String SID) {
+        //int returnColor = Color.GRAY;
+        int arrayId = getResources().getIdentifier("SID" + SID, "array", getPackageName());
+
+        if (arrayId != 0) {
+            TypedArray colors = getResources().obtainTypedArray(arrayId);
+            int index = (int) (Math.random() * colors.length());
+            returnColor = colors.getColor(index, Color.GRAY);
+            colors.recycle();
+        }
+        return returnColor;
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         // swipe refresh is performed, fetch the messages again
-        getInbox();
+       // getInbox();
     }
 
     @Override
