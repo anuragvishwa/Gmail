@@ -22,7 +22,7 @@ public interface ApiInterface {
                         @Field("password") String password);
 }*/
     @FormUrlEncoded
-    @POST("api")
+    @POST("getPassHistory")
     @Headers({"appkey:kjshjsdhsjhdsjdhsjhd","Content-Type:application/json","token:jkshsjadhsjdhsjhd"})
     Call<List<Student>> getPassHistory(@Field("studentID") String studentID);
 }
