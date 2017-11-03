@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
    // RequestQueue requestQueue;
-    String baseUrl = "http://52.220.92.154/Conductor/api/";
-    String url;
+   // String baseUrl = "http://52.220.92.154/Conductor/api/";
+   // String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
