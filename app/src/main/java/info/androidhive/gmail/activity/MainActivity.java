@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,20 +35,13 @@ import info.androidhive.gmail.network.ApiClient;
 import info.androidhive.gmail.network.ApiInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.Response;
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
+
 
 
 
@@ -95,15 +90,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         actionModeCallback = new ActionModeCallback();
 
-        requestQueue = Volley.newRequestQueue(this);
+       // requestQueue = Volley.newRequestQueue(this);
 
         // show loader and fetch messages
         swipeRefreshLayout.post(
                 new Runnable() {
                     @Override
                     public void run() {
-                        //getInbox();
-                        getData();
+                        getInbox();
+                        //getData();
                     }
                 }
         );
@@ -115,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
      */
 
 
-   public void getData(){
-       final RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+   /*public void getData(){
+       RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
        String url = "http://52.220.92.154/Conductor/api/getPassHistory";
        // Request a string response from the provided URL.
@@ -127,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                        // Display the response string.
                        //_response.setText(response);
                        Log.d("response",response);
-
 
                    }
                }, new Response.ErrorListener() {
@@ -150,31 +144,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
            protected Map<String, String> getParams() throws AuthFailureError {
                Map<String, String> params = new HashMap<>();
                params.put("studentID", "31520");
-              // params.clear();
-               //requestQueue.getCache().invalidate("studentID", true);
                return params;
            }
        };
        // Add the request to the RequestQueue.
        queue.add(stringRequest);
    }
+*/
 
 
-
-
-
-
-
-
-
-    /*private void getInbox() {
+    private void getInbox() {
         swipeRefreshLayout.setRefreshing(true);
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
         Call<List<Student>> call = apiService.getPassHistory("31520");
-       // Call<List<Post>> call = apiService.savePost("1","1","1","1");
+        // Call<List<Post>> call = apiService.savePost("1","1","1","1");
         call.enqueue(new Callback<List<Student>>() {
             @Override
             public void onResponse(Call<List<Student>> call, Response<List<Student>> response) {
@@ -190,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                 for (Student student : response.body()) {
                     // generate a random color
+
+                    Log.d("response",response.body().toString());
                     student.setColor(getRandomMaterialColor("400"));
                     students.add(student);
                 }
@@ -204,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-    }*/
+    }
 
     /**
      * chooses a random color from array.xml
@@ -223,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
 
-    /*private int getSID(String SID) {
-        //int returnColor = Color.GRAY;
+    private int getSID(String SID) {
+        int returnColor = Color.GRAY;
         int arrayId = getResources().getIdentifier("SID" + SID, "array", getPackageName());
 
         if (arrayId != 0) {
@@ -234,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             colors.recycle();
         }
         return returnColor;
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -262,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         // swipe refresh is performed, fetch the messages again
-       // getInbox();
+        // getInbox();
     }
 
     @Override
