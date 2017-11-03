@@ -1,133 +1,173 @@
-package info.androidhive.gmail.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by energywin4 on 2/11/2017.
- */
+        package info.androidhive.gmail.model;
 
-public class Student {
-    public String getTimestamp() {
-        return timestamp;
-    }
+        import com.google.gson.annotations.Expose;
+        import com.google.gson.annotations.SerializedName;
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
+        import java.util.List;
 
-    public String getPicture() {
-        return picture;
-    }
+        class PassHistory {
 
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
+    @SerializedName("PickupDate")
+    @Expose
+    private String pickupDate;
+    @SerializedName("NonguardianName")
+    @Expose
+    private String nonguardianName;
+    @SerializedName("NonguardianRelation")
+    @Expose
+    private String nonguardianRelation;
+    @SerializedName("ImageURL")
+    @Expose
+    private String imageURL;
+    @SerializedName("NonguardianID")
+    @Expose
+    private int nonguardianID;
+    @SerializedName("Student")
+    @Expose
+    private Object student;
+    @SerializedName("ID1")
+    @Expose
+    private int iD1;
 
-    public boolean isImportant() {
-        return isImportant;
-    }
-
-    public void setImportant(boolean important) {
-        isImportant = important;
-    }
-
-    public boolean isRead() {
-        return isRead;
-    }
-
-    public void setRead(boolean read) {
-        isRead = read;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
-    }
-
-    private String timestamp;
-    private String picture;
-    private boolean isImportant;
-    private boolean isRead;
-    private int color = -1;
     public String getPickupDate() {
-        return PickupDate;
+        return pickupDate;
     }
 
     public void setPickupDate(String pickupDate) {
-        PickupDate = pickupDate;
+        this.pickupDate = pickupDate;
     }
 
     public String getNonguardianName() {
-        return NonguardianName;
+        return nonguardianName;
     }
 
     public void setNonguardianName(String nonguardianName) {
-        NonguardianName = nonguardianName;
+        this.nonguardianName = nonguardianName;
     }
 
     public String getNonguardianRelation() {
-        return NonguardianRelation;
+        return nonguardianRelation;
     }
 
     public void setNonguardianRelation(String nonguardianRelation) {
-        NonguardianRelation = nonguardianRelation;
+        this.nonguardianRelation = nonguardianRelation;
     }
 
     public String getImageURL() {
-        return ImageURL;
+        return imageURL;
     }
 
     public void setImageURL(String imageURL) {
-        ImageURL = imageURL;
+        this.imageURL = imageURL;
     }
 
-    public String getNonguardianID() {
-        return NonguardianID;
+    public int getNonguardianID() {
+        return nonguardianID;
     }
 
-    public void setNonguardianID(String nonguardianID) {
-        NonguardianID = nonguardianID;
+    public void setNonguardianID(int nonguardianID) {
+        this.nonguardianID = nonguardianID;
     }
 
-    public String getID1() {
-        return ID1;
+    public Object getStudent() {
+        return student;
     }
 
-    public void setID1(String ID1) {
-        this.ID1 = ID1;
+    public void setStudent(Object student) {
+        this.student = student;
     }
-    @SerializedName("PickupDate")
-    @Expose
-    private String PickupDate;
-    @SerializedName("NonguardianName")
-    @Expose
-    private String NonguardianName;
-    @SerializedName("NonguardianRelation")
-    @Expose
-    private String NonguardianRelation;
-    @SerializedName("ImageURL")
-    @Expose
-    private String ImageURL;
-    @SerializedName("NonguardianID")
-    @Expose
-    private String NonguardianID;
-    @SerializedName("ID1")
-    @Expose
-    private String ID1;
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "PickupDate='" + PickupDate + '\'' +
-                ", NonguardianName='" + NonguardianName + '\'' +
-                ", NonguardianRelation=" + NonguardianRelation +
-                ", ImageURL=" + ImageURL + '\'' +
-                ",NonguardianID="+NonguardianID + '\'' +
-                ",ID1="+ ID1 +
-                '}';
+    public int getID1() {
+        return iD1;
     }
+
+    public void setID1(int iD1) {
+        this.iD1 = iD1;
+    }
+
+}
+
+
+class Response {
+
+    @SerializedName("studentID")
+    @Expose
+    private String studentID;
+    @SerializedName("passHistory")
+    @Expose
+    private List<PassHistory> passHistory = null;
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
+    }
+
+    public List<PassHistory> getPassHistory() {
+        return passHistory;
+    }
+
+    public void setPassHistory(List<PassHistory> passHistory) {
+        this.passHistory = passHistory;
+    }
+
+}
+
+
+class Status {
+
+    @SerializedName("resCode")
+    @Expose
+    private int resCode;
+    @SerializedName("resMsg")
+    @Expose
+    private String resMsg;
+
+    public int getResCode() {
+        return resCode;
+    }
+
+    public void setResCode(int resCode) {
+        this.resCode = resCode;
+    }
+
+    public String getResMsg() {
+        return resMsg;
+    }
+
+    public void setResMsg(String resMsg) {
+        this.resMsg = resMsg;
+    }
+
+}
+
+public class Student {
+
+    @SerializedName("status")
+    @Expose
+    private Status status;
+    @SerializedName("response")
+    @Expose
+    private Response response;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Response getResponse() {
+        return response;
+    }
+
+    public void setResponse(Response response) {
+        this.response = response;
+    }
+
 }

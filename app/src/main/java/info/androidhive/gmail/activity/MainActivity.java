@@ -18,8 +18,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +44,9 @@ import info.androidhive.gmail.network.ApiClient;
 import info.androidhive.gmail.network.ApiInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Converter;
 import retrofit2.Response;
+//import retrofit2.Response;
 
 
 import org.json.JSONArray;
@@ -57,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private SwipeRefreshLayout swipeRefreshLayout;
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
-    RequestQueue requestQueue;
+   // RequestQueue requestQueue;
     String baseUrl = "http://52.220.92.154/Conductor/api/";
     String url;
 
@@ -90,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         actionModeCallback = new ActionModeCallback();
 
-       // requestQueue = Volley.newRequestQueue(this);
+        //requestQueue = Volley.newRequestQueue(this);
 
         // show loader and fetch messages
         swipeRefreshLayout.post(
@@ -99,6 +110,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     public void run() {
                         getInbox();
                         //getData();
+
+
+                        /*try{
+                            sendPost();
+                        }
+                        catch (Exception ex){
+
+                        }*/
+
+
+
                     }
                 }
         );
@@ -134,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
            //adding parameters to the request
 
            @Override
-           public Map<String,String> getHeaders() throws AuthFailureError{
+           public Map<String,String> getHeaders() throws AuthFailureError {
                HashMap<String, String> headers = new HashMap<String, String>();
               // headers.put("Content-Type", "application/json; charset=utf-8");
                headers.put("appkey", "kjshjsdhsjhdsjdhsjhd");
@@ -149,8 +171,62 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
        };
        // Add the request to the RequestQueue.
        queue.add(stringRequest);
+   }*/
+
+  /* private void sendPost() throws Exception{
+       String url = "http://52.220.92.154/Conductor/getPassHistory";
+       URL obj = new URL(url);
+       HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+       OutputStream wr = null;
+
+       //adding request headers:
+       con.setRequestMethod("POST");
+       con.setRequestProperty("appkey","kjshjsdhsjhdsjdhsjhd");
+       con.setRequestProperty("Content-Type","application/json");
+       con.setRequestProperty("token","jkshsjadhsjdhsjhd");
+
+       String urlParameters = "studentID:31520";
+
+
+       //send post request:
+       con.setDoOutput(true);
+
+       Log.v("check","check0");
+
+       wr = new BufferedOutputStream(con.getOutputStream());
+       Log.v("check","check1");
+
+       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(wr,"UTF-8"));
+
+       writer.write(urlParameters);
+       writer.flush();
+       writer.close();
+       Log.v("check","check2");
+
+       int responseCode = con.getResponseCode();
+       Log.v("url",url);
+       Log.v("urlParameters",urlParameters);
+      // Log.v("responseCode", ((String) responseCode));
+
+       BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+       String inputLine ;
+       StringBuffer response = new StringBuffer();
+
+       while ((inputLine = in.readLine()) != null) {
+           response.append(inputLine);
+       }
+
+       in.close();
+
+       //print result:
+
+       Log.v("response",response.toString());
+
+
+
    }
 */
+
 
 
     private void getInbox() {
@@ -172,13 +248,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                 // TODO - avoid looping
                 // the loop was performed to add colors to each message
-                Log.v(response.body().toString(),call.toString());
+                Log.v("response code","RC" +response.code());
 
                 for (Student student : response.body()) {
                     // generate a random color
 
                     Log.d("response",response.body().toString());
-                    student.setColor(getRandomMaterialColor("400"));
+                  //  student.setColor(getRandomMaterialColor("400"));
                     students.add(student);
                 }
 
@@ -250,7 +326,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         // swipe refresh is performed, fetch the messages again
-        // getInbox();
+         getInbox();
+       /* try{
+            sendPost();
+        }
+        catch (Exception ex){
+
+        }*/
     }
 
     @Override

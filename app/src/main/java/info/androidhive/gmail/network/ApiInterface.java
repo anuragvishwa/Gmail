@@ -21,9 +21,9 @@ public interface ApiInterface {
                         @Field("userName") String userName,
                         @Field("password") String password);
 }*/
-    @Headers({"appkey:kjshjsdhsjhdsjdhsjhd","Content-Type:application/json"})
-    @POST("/api")
     @FormUrlEncoded
+    @POST("api")
+    @Headers({"appkey:kjshjsdhsjhdsjdhsjhd","Content-Type:application/json","token:jkshsjadhsjdhsjhd"})
     Call<List<Student>> getPassHistory(@Field("studentID") String studentID);
 }
 
