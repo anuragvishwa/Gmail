@@ -1,14 +1,9 @@
 package info.androidhive.gmail.network;
 
-import java.util.List;
-
-import info.androidhive.gmail.model.Message;
-import info.androidhive.gmail.model.Post;
 import info.androidhive.gmail.model.Student;
+import info.androidhive.gmail.model.StudentRequest;
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
+import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -21,10 +16,10 @@ public interface ApiInterface {
                         @Field("userName") String userName,
                         @Field("password") String password);
 }*/
-    @FormUrlEncoded
+
     @POST("getPassHistory")
     @Headers({"appkey:kjshjsdhsjhdsjdhsjhd","token:jkshsjadhsjdhsjhd"})
-    Call<Student> getPassHistory(@Field("studentID") String studentID);
+    Call<Student> getPassHistory(@Body StudentRequest studentRequest);
 }
 
 

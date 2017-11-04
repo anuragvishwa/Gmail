@@ -19,20 +19,8 @@ import android.view.View;
 import android.widget.Toast;
 
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import info.androidhive.gmail.R;
 import info.androidhive.gmail.adapter.MessagesAdapter;
@@ -40,21 +28,13 @@ import info.androidhive.gmail.helper.DividerItemDecoration;
 import info.androidhive.gmail.model.Message;
 import info.androidhive.gmail.model.Post;
 import info.androidhive.gmail.model.Student;
+import info.androidhive.gmail.model.StudentRequest;
 import info.androidhive.gmail.network.ApiClient;
 import info.androidhive.gmail.network.ApiInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Converter;
 import retrofit2.Response;
 //import retrofit2.Response;
-
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
-
-
-
 
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, MessagesAdapter.MessageAdapterListener {
@@ -109,123 +89,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     @Override
                     public void run() {
                         getInbox();
-                        //getData();
-
-
-                        /*try{
-                            sendPost();
-                        }
-                        catch (Exception ex){
-
-                        }*/
-
-
 
                     }
                 }
         );
     }
-
-    /**
-     * Fetches mail messages by making HTTP request
-     * url: http://api.androidhive.info/json/inbox.json
-     */
-
-
-   /*public void getData(){
-       RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-
-       String url = "http://52.220.92.154/Conductor/api/getPassHistory";
-       // Request a string response from the provided URL.
-       StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-               new Response.Listener<String>() {
-                   @Override
-                   public void onResponse(String response) {
-                       // Display the response string.
-                       //_response.setText(response);
-                       Log.d("response",response);
-
-                   }
-               }, new Response.ErrorListener() {
-           @Override
-           public void onErrorResponse(VolleyError error) {
-               //_response.setText("That didn't work!");
-               Log.v("Error",error.toString());
-           }
-       }) {
-           //adding parameters to the request
-
-           @Override
-           public Map<String,String> getHeaders() throws AuthFailureError {
-               HashMap<String, String> headers = new HashMap<String, String>();
-              // headers.put("Content-Type", "application/json; charset=utf-8");
-               headers.put("appkey", "kjshjsdhsjhdsjdhsjhd");
-               return headers;
-           }
-           @Override
-           protected Map<String, String> getParams() throws AuthFailureError {
-               Map<String, String> params = new HashMap<>();
-               params.put("studentID", "31520");
-               return params;
-           }
-       };
-       // Add the request to the RequestQueue.
-       queue.add(stringRequest);
-   }*/
-
-  /* private void sendPost() throws Exception{
-       String url = "http://52.220.92.154/Conductor/getPassHistory";
-       URL obj = new URL(url);
-       HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-       OutputStream wr = null;
-
-       //adding request headers:
-       con.setRequestMethod("POST");
-       con.setRequestProperty("appkey","kjshjsdhsjhdsjdhsjhd");
-       con.setRequestProperty("Content-Type","application/json");
-       con.setRequestProperty("token","jkshsjadhsjdhsjhd");
-
-       String urlParameters = "studentID:31520";
-
-
-       //send post request:
-       con.setDoOutput(true);
-
-       Log.v("check","check0");
-
-       wr = new BufferedOutputStream(con.getOutputStream());
-       Log.v("check","check1");
-
-       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(wr,"UTF-8"));
-
-       writer.write(urlParameters);
-       writer.flush();
-       writer.close();
-       Log.v("check","check2");
-
-       int responseCode = con.getResponseCode();
-       Log.v("url",url);
-       Log.v("urlParameters",urlParameters);
-      // Log.v("responseCode", ((String) responseCode));
-
-       BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-       String inputLine ;
-       StringBuffer response = new StringBuffer();
-
-       while ((inputLine = in.readLine()) != null) {
-           response.append(inputLine);
-       }
-
-       in.close();
-
-       //print result:
-
-       Log.v("response",response.toString());
-
-
-
-   }
-*/
 
 
 
@@ -235,24 +103,19 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<Student> call = apiService.getPassHistory("31520");
-        // Call<List<Post>> call = apiService.savePost("1","1","1","1");
+        StudentRequest studentRequest = new StudentRequest("31520");
+
+        Call<Student> call = apiService.getPassHistory(studentRequest);
+
         call.enqueue(new Callback<Student>() {
             @Override
             public void onResponse(Call<Student> call, Response<Student> response) {
                 // clear the inbox
                 students.clear();
 
-                // add all the messages
-                // messages.addAll(response.body());
-
-                // TODO - avoid looping
-                // the loop was performed to add colors to each message
 
                 Log.v("response code","RC" +response.code());
 
-             //   for (Student student : response.body()) {
-                    // generate a random color
 
                 Student student = new Student();
                 student = response.body();
@@ -260,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
 
 
-                    Log.d("response","response" +student.getStatus().getResCode());
+                    Log.d("response","response" +student.getResponse().getStudentID());
                   //  student.setColor(getRandomMaterialColor("400"));
                 //    students.add(student);
             //    }
