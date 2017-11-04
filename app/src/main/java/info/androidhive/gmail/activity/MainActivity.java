@@ -235,11 +235,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<List<Student>> call = apiService.getPassHistory("31520");
+        Call<Student> call = apiService.getPassHistory("31520");
         // Call<List<Post>> call = apiService.savePost("1","1","1","1");
-        call.enqueue(new Callback<List<Student>>() {
+        call.enqueue(new Callback<Student>() {
             @Override
-            public void onResponse(Call<List<Student>> call, Response<List<Student>> response) {
+            public void onResponse(Call<Student> call, Response<Student> response) {
                 // clear the inbox
                 students.clear();
 
@@ -248,22 +248,30 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                 // TODO - avoid looping
                 // the loop was performed to add colors to each message
+
                 Log.v("response code","RC" +response.code());
 
-                for (Student student : response.body()) {
+             //   for (Student student : response.body()) {
                     // generate a random color
 
-                    Log.d("response",response.body().toString());
+                Student student = new Student();
+                student = response.body();
+
+
+
+
+                    Log.d("response","response" +student.getStatus().getResCode());
                   //  student.setColor(getRandomMaterialColor("400"));
-                    students.add(student);
-                }
+                //    students.add(student);
+            //    }
+
 
                 mAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
-            public void onFailure(Call<List<Student>> call, Throwable t) {
+            public void onFailure(Call<Student> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Unable to fetch json: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(false);
             }
