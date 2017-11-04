@@ -124,8 +124,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
 
                     Log.d("response","response" +student.getResponse().getStudentID());
-                  //  student.setColor(getRandomMaterialColor("400"));
-                //    students.add(student);
+                    student.setColor(getRandomMaterialColor("400"));
+                    students.add(student);
             //    }
 
 
